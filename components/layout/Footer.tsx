@@ -33,11 +33,19 @@ export function Footer() {
                 <svg
                   viewBox="0 0 40 40"
                   className="w-10 h-10 text-sage-400 transition-transform duration-300 group-hover:scale-110"
-                  fill="currentColor"
                 >
-                  <path d="M20 2l3 10h10l-8 6 3 10-8-6-8 6 3-10-8-6h10l3-10z" opacity="0.3"/>
-                  <path d="M20 6l2 7h7l-6 4 2 7-5-4-5 4 2-7-6-4h7l2-7z"/>
-                  <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.4"/>
+                  <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+                  <text
+                    x="20"
+                    y="26"
+                    textAnchor="middle"
+                    fill="currentColor"
+                    fontSize="16"
+                    fontWeight="600"
+                    fontFamily="serif"
+                  >
+                    AZ
+                  </text>
                 </svg>
                 <div className="flex flex-col">
                   <span className="text-xl font-display font-semibold text-cream-100">

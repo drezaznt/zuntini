@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { clsx } from 'clsx'
@@ -18,7 +19,18 @@ const navigation = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
+
+  // Função para fechar o menu
+  const closeMenu = useCallback(() => {
+    setIsMobileMenuOpen(false)
+  }, [])
+
+  // Portal mount check
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,10 +41,18 @@ export function Header() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Fecha menu mobile ao mudar de rota
+  // Fecha menu mobile ao mudar de rota ou hash
   useEffect(() => {
-    setIsMobileMenuOpen(false)
-  }, [pathname])
+    closeMenu()
+    
+    // Listener para mudanças de hash (links âncora)
+    const handleHashChange = () => {
+      closeMenu()
+    }
+    
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [pathname, closeMenu])
 
   // Previne scroll quando menu mobile está aberto
   useEffect(() => {
@@ -47,6 +67,7 @@ export function Header() {
   }, [isMobileMenuOpen])
 
   return (
+    <>
     <header
       className={clsx(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
@@ -64,15 +85,23 @@ export function Header() {
             aria-label={siteConfig.name}
           >
             <div className="relative">
-              {/* Ícone de raio de luz estilizado */}
+              {/* Logo AZ - Andreza Zuntini */}
               <svg
                 viewBox="0 0 40 40"
                 className="w-10 h-10 text-sage-600 transition-transform duration-300 group-hover:scale-110"
-                fill="currentColor"
               >
-                <path d="M20 2l3 10h10l-8 6 3 10-8-6-8 6 3-10-8-6h10l3-10z" opacity="0.3"/>
-                <path d="M20 6l2 7h7l-6 4 2 7-5-4-5 4 2-7-6-4h7l2-7z"/>
-                <circle cx="20" cy="20" r="16" fill="none" stroke="currentColor" strokeWidth="1.5" opacity="0.4"/>
+                <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="1.5"/>
+                <text
+                  x="20"
+                  y="26"
+                  textAnchor="middle"
+                  fill="currentColor"
+                  fontSize="16"
+                  fontWeight="600"
+                  fontFamily="serif"
+                >
+                  AZ
+                </text>
               </svg>
             </div>
             <div className="flex flex-col">
@@ -117,7 +146,7 @@ export function Header() {
           {/* Mobile Menu Button */}
           <button
             type="button"
-            className="md:hidden p-2 -mr-2 text-sage-700 hover:text-sage-900 focus-ring rounded-lg"
+            className="md:hidden p-2 -mr-2 text-sage-700 hover:text-sage-900 focus-ring rounded-lg relative z-[60]"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-expanded={isMobileMenuOpen}
             aria-label={isMobileMenuOpen ? 'Fechar menu' : 'Abrir menu'}
@@ -151,70 +180,81 @@ export function Header() {
         </nav>
       </Container>
 
-      {/* Mobile Menu Overlay */}
-      <div
-        className={clsx(
-          'fixed inset-0 bg-sage-900/20 backdrop-blur-sm md:hidden transition-opacity duration-300 z-40',
-          isMobileMenuOpen
-            ? 'opacity-100 pointer-events-auto'
-            : 'opacity-0 pointer-events-none'
-        )}
-        onClick={() => setIsMobileMenuOpen(false)}
-        aria-hidden="true"
-      />
-
-      {/* Mobile Menu Panel */}
-      <div
-        className={clsx(
-          'fixed top-0 right-0 bottom-0 w-[280px] bg-cream-100 shadow-2xl md:hidden',
-          'transform transition-transform duration-300 ease-out z-50',
-          isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-        )}
-      >
-        <div className="flex flex-col h-full pt-20 pb-6 px-6">
-          <nav className="flex-1">
-            <ul className="space-y-1">
-              {navigation.map((item, index) => (
-                <li
-                  key={item.name}
-                  style={{ animationDelay: `${index * 50}ms` }}
-                  className={clsx(
-                    isMobileMenuOpen && 'animate-fade-in-up'
-                  )}
-                >
-                  <Link
-                    href={item.href}
-                    className={clsx(
-                      'block px-4 py-3 text-lg font-display text-sage-800',
-                      'rounded-xl transition-colors duration-200',
-                      'hover:bg-sage-100',
-                      pathname === item.href && 'bg-sage-100 text-sage-900'
-                    )}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Mobile CTA */}
-          <div className="pt-6 border-t border-sage-200">
-            <Link
-              href={siteConfig.contact.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-primary w-full justify-center"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              <WhatsAppIcon className="w-5 h-5 mr-2" />
-              Agendar Atendimento
-            </Link>
-          </div>
-        </div>
-      </div>
     </header>
+
+      {/* Mobile Menu - Rendered via Portal to ensure proper overlay */}
+      {mounted && isMobileMenuOpen && createPortal(
+        <div 
+          className="fixed inset-0 z-[9999] md:hidden"
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* Backdrop overlay - covers entire screen */}
+          <div
+            className="fixed inset-0"
+            style={{ backgroundColor: 'rgba(0, 0, 0, 0.6)', zIndex: 9998 }}
+            onClick={closeMenu}
+          />
+
+          {/* Menu Panel */}
+          <div 
+            className="fixed top-0 right-0 bottom-0 w-[280px] max-w-[85vw] bg-cream-100 shadow-2xl"
+            style={{ zIndex: 9999 }}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={closeMenu}
+              className="absolute top-5 right-4 p-2 text-sage-600 hover:text-sage-800 focus-ring rounded-lg"
+              aria-label="Fechar menu"
+            >
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Menu Content */}
+            <div className="flex flex-col h-full pt-16 pb-6 px-6">
+              <nav className="flex-1">
+                <ul className="space-y-1">
+                  {navigation.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        href={item.href}
+                        className={clsx(
+                          'block px-4 py-3 text-lg font-display text-sage-800',
+                          'rounded-xl transition-colors duration-200',
+                          'hover:bg-sage-100 active:bg-sage-200',
+                          pathname === item.href && 'bg-sage-100 text-sage-900'
+                        )}
+                        onClick={closeMenu}
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+
+              {/* Mobile CTA */}
+              <div className="pt-6 border-t border-sage-200">
+                <Link
+                  href={siteConfig.contact.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary w-full justify-center"
+                  onClick={closeMenu}
+                >
+                  <WhatsAppIcon className="w-5 h-5 mr-2" />
+                  Agendar Atendimento
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
+    </>
   )
 }
 

@@ -100,29 +100,29 @@ export function Services() {
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
-        {/* Lista de serviços - Mobile: Cards, Desktop: Tabs */}
+      <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Lista de serviços - Mobile: Grid compacto, Desktop: Sidebar */}
         <div className="lg:col-span-1">
-          <div className="flex lg:flex-col gap-3 overflow-x-auto pb-4 lg:pb-0 scrollbar-hide">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-1 gap-2 lg:gap-3">
             {services.map((service) => (
               <button
                 key={service.id}
                 onClick={() => setActiveService(service.id)}
                 className={clsx(
-                  'flex-shrink-0 text-left p-4 rounded-xl transition-all duration-300',
-                  'border-2 min-w-[200px] lg:min-w-0',
+                  'text-left p-3 lg:p-4 rounded-xl transition-all duration-300',
+                  'border-2 w-full',
                   activeService === service.id
                     ? 'bg-sage-600 border-sage-600 text-white shadow-lg'
                     : 'bg-white border-cream-300 text-sage-800 hover:border-sage-300 hover:shadow'
                 )}
               >
-                <span className="text-2xl mb-2 block">{service.icon}</span>
-                <span className="font-display font-medium text-lg block mb-1">
+                <span className="text-xl lg:text-2xl mb-1 lg:mb-2 block">{service.icon}</span>
+                <span className="font-display font-medium text-sm lg:text-lg block leading-tight">
                   {service.title}
                 </span>
                 <span
                   className={clsx(
-                    'text-sm block',
+                    'text-xs lg:text-sm hidden lg:block mt-1',
                     activeService === service.id ? 'text-cream-200' : 'text-sage-600'
                   )}
                 >
@@ -135,33 +135,33 @@ export function Services() {
 
         {/* Detalhes do serviço selecionado */}
         <div className="lg:col-span-2">
-          <div className="card p-8 md:p-10 h-full">
-            <div className="flex items-start gap-4 mb-6">
-              <span className="text-5xl">{currentService.icon}</span>
-              <div>
-                <h3 className="text-2xl md:text-3xl font-display font-medium text-sage-900">
+          <div className="card p-5 sm:p-6 md:p-8 lg:p-10 h-full overflow-hidden">
+            <div className="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
+              <span className="text-3xl sm:text-4xl lg:text-5xl flex-shrink-0">{currentService.icon}</span>
+              <div className="min-w-0">
+                <h3 className="text-xl sm:text-2xl md:text-3xl font-display font-medium text-sage-900 break-words">
                   {currentService.title}
                 </h3>
               </div>
             </div>
 
-            <p className="text-sage-700 text-lg leading-relaxed mb-8">
+            <p className="text-sage-700 text-base lg:text-lg leading-relaxed mb-6 sm:mb-8">
               {currentService.description}
             </p>
 
-            {/* Info cards */}
-            <div className="grid sm:grid-cols-3 gap-4 mb-8">
-              <div className="bg-sage-50 rounded-xl p-4">
-                <span className="text-sage-500 text-sm block mb-1">Duração</span>
-                <span className="text-sage-900 font-medium">{currentService.duration}</span>
+            {/* Info cards - Stack on mobile */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
+              <div className="bg-sage-50 rounded-xl p-3 sm:p-4">
+                <span className="text-sage-500 text-xs sm:text-sm block mb-1">Duração</span>
+                <span className="text-sage-900 font-medium text-sm sm:text-base">{currentService.duration}</span>
               </div>
-              <div className="bg-sage-50 rounded-xl p-4">
-                <span className="text-sage-500 text-sm block mb-1">Modalidade</span>
-                <span className="text-sage-900 font-medium">{currentService.modality}</span>
+              <div className="bg-sage-50 rounded-xl p-3 sm:p-4">
+                <span className="text-sage-500 text-xs sm:text-sm block mb-1">Modalidade</span>
+                <span className="text-sage-900 font-medium text-sm sm:text-base">{currentService.modality}</span>
               </div>
-              <div className="bg-sage-50 rounded-xl p-4">
-                <span className="text-sage-500 text-sm block mb-1">Frequência</span>
-                <span className="text-sage-900 font-medium">{currentService.frequency}</span>
+              <div className="bg-sage-50 rounded-xl p-3 sm:p-4">
+                <span className="text-sage-500 text-xs sm:text-sm block mb-1">Frequência</span>
+                <span className="text-sage-900 font-medium text-sm sm:text-base">{currentService.frequency}</span>
               </div>
             </div>
 
@@ -169,10 +169,10 @@ export function Services() {
               href={siteConfig.contact.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-primary"
+              className="btn-primary w-full sm:w-auto justify-center text-sm sm:text-base"
             >
-              <WhatsAppIcon className="w-5 h-5 mr-2" />
-              Agendar {currentService.title}
+              <WhatsAppIcon className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+              <span className="truncate">Agendar {currentService.title}</span>
             </Link>
           </div>
         </div>

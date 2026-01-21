@@ -94,7 +94,7 @@ export function Hero() {
               {/* Imagem principal */}
               <div className="relative aspect-[3/4] w-[280px] sm:w-[320px] md:w-[380px] rounded-2xl overflow-hidden shadow-2xl shadow-sage-900/10">
                 <Image
-                  src="/images/andreza-hero.jpg"
+                  src="/images/IMG_4493insta.jpg"
                   alt="Andreza Zuntini - Terapeuta Sistêmica Integrativa"
                   fill
                   className="object-cover"
@@ -110,7 +110,19 @@ export function Hero() {
               <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg p-4 animate-float">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center">
-                    <LightIcon className="w-5 h-5 text-sage-600" />
+                    <svg viewBox="0 0 40 40" className="w-6 h-6 text-sage-600">
+                      <text
+                        x="20"
+                        y="28"
+                        textAnchor="middle"
+                        fill="currentColor"
+                        fontSize="18"
+                        fontWeight="600"
+                        fontFamily="serif"
+                      >
+                        AZ
+                      </text>
+                    </svg>
                   </div>
                   <div>
                     <span className="block text-xs text-sage-500">Transformação</span>
