@@ -22,36 +22,21 @@ export function Header() {
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
 
-  // Função para fechar o menu
   const closeMenu = useCallback(() => {
     setIsMobileMenuOpen(false)
   }, [])
 
-  // Portal mount check
   useEffect(() => {
     setMounted(true)
-  }, [])
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20)
-    }
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 20)
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // Fecha menu mobile ao mudar de rota ou hash
   useEffect(() => {
     closeMenu()
-    
-    // Listener para mudanças de hash (links âncora)
-    const handleHashChange = () => {
-      closeMenu()
-    }
-    
-    window.addEventListener('hashchange', handleHashChange)
-    return () => window.removeEventListener('hashchange', handleHashChange)
+    window.addEventListener('hashchange', closeMenu)
+    return () => window.removeEventListener('hashchange', closeMenu)
   }, [pathname, closeMenu])
 
   // Previne scroll quando menu mobile está aberto

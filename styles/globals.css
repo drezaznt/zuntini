@@ -2,204 +2,405 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   DESIGN TOKENS — Sistema coerente de variáveis CSS
+   Inspiração: natureza orgânica, botanicals, aquarela em papel creme
+   ───────────────────────────────────────────────────────────────────────────── */
 @layer base {
   :root {
-    --color-sage-primary: #667b54;
-    --color-sage-dark: #404d35;
-    --color-cream: #faf8f3;
-    --color-earth: #b08c6b;
+    /* ── Tipografia ── */
+    --font-display: var(--font-cormorant), Georgia, serif;
+    --font-body:    var(--font-lora),      Georgia, serif;
+    --font-ui:      var(--font-inter),     system-ui, sans-serif;
+
+    /* Extremos de peso — contraste intencional */
+    --weight-thin:    300; /* display elegante — Cormorant */
+    --weight-normal:  400;
+    --weight-semi:    600;
+    --weight-bold:    700; /* display impacto — labels e CTAs */
+
+    /* Letter-spacing por uso */
+    --tracking-display: -0.02em; /* títulos grandes ficam mais coesos */
+    --tracking-body:     0.01em;
+    --tracking-label:    0.10em; /* all-caps legível */
+
+    /* ── Paleta base ── */
+    --color-sage-50:   #f6f7f4;
+    --color-sage-100:  #e3e7dd;
+    --color-sage-200:  #c7d0bb;
+    --color-sage-300:  #a4b392;
+    --color-sage-400:  #839871;
+    --color-sage-500:  #667b54;
+    --color-sage-600:  #506241;
+    --color-sage-700:  #404d35;
+    --color-sage-800:  #363f2e;
+    --color-sage-900:  #2f3629;
+    --color-sage-950:  #171c14;
+
+    --color-earth-300: #d2c0a8;
+    --color-earth-400: #bea285;
+    --color-earth-500: #b08c6b;
+    --color-earth-600: #a37a5e;
+
+    --color-cream-50:  #fdfcfa;
+    --color-cream-100: #faf8f3;
+    --color-cream-200: #f5f1e8;
+    --color-cream-300: #ece5d7;
+
+    /* ── Semântica ── */
+    --bg-primary:   var(--color-cream-100);
+    --bg-secondary: var(--color-cream-200);
+    --bg-accent:    var(--color-sage-50);
+    --bg-dark:      var(--color-sage-900);
+
+    --text-primary:   var(--color-sage-900);
+    --text-secondary: var(--color-sage-700);
+    --text-muted:     var(--color-sage-500);
+    --text-inverse:   var(--color-cream-100);
+
+    --accent-main:  var(--color-sage-500);
+    --accent-warm:  var(--color-earth-500);
+    --accent-light: var(--color-sage-300);
+
+    /* ── Motion ── */
+    --ease-expo-out:   cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-expo-in:    cubic-bezier(0.7, 0, 0.84, 0);
+    --ease-bounce:     cubic-bezier(0.34, 1.56, 0.64, 1);
+    --ease-smooth:     cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+    --dur-fast:   0.25s;
+    --dur-base:   0.55s;
+    --dur-slow:   0.90s;
+    --dur-slower: 1.20s;
+
+    /* ── Espacamento ── */
+    --space-xs:  0.5rem;
+    --space-sm:  1rem;
+    --space-md:  2rem;
+    --space-lg:  4rem;
+    --space-xl:  8rem;
+
+    /* ── Radius ── */
+    --radius-sm:  0.75rem;
+    --radius-md:  1rem;
+    --radius-lg:  1.5rem;
+    --radius-xl:  2rem;
+    --radius-full: 9999px;
   }
 
+  /* ── Reset & base ── */
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
 
   body {
-    @apply bg-cream-100 text-sage-900 font-body;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    font-weight: var(--weight-normal);
+    letter-spacing: var(--tracking-body);
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+  /* Tipografia — contraste de peso extremo */
+  h1 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-thin);     /* 300 — elegância fina */
+    letter-spacing: var(--tracking-display);
+    line-height: 1.1;
   }
 
-  /* Selection color */
+  h2 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-thin);
+    letter-spacing: var(--tracking-display);
+    line-height: 1.2;
+  }
+
+  h3, h4 {
+    font-family: var(--font-display);
+    font-weight: var(--weight-semi);     /* 600 — legível em menores */
+    letter-spacing: -0.01em;
+  }
+
+  h5, h6 {
+    font-family: var(--font-ui);
+    font-weight: var(--weight-bold);
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+  }
+
+  p {
+    font-family: var(--font-body);
+    font-weight: var(--weight-normal);
+    line-height: 1.75;
+  }
+
   ::selection {
-    @apply bg-sage-300 text-sage-900;
+    background: var(--color-sage-200);
+    color: var(--color-sage-900);
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   COMPONENTS
+   ───────────────────────────────────────────────────────────────────────────── */
 @layer components {
-  /* Botão primário */
+
+  /* ── Botões ── */
   .btn-primary {
-    @apply inline-flex items-center justify-center px-6 py-3 
-           bg-sage-600 text-white font-medium rounded-full
-           transition-all duration-300 ease-out
-           hover:bg-sage-700 hover:shadow-lg hover:shadow-sage-600/25
-           focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2
-           active:scale-[0.98];
+    @apply inline-flex items-center justify-center px-6 py-3
+           bg-sage-600 text-white rounded-full
+           transition-all active:scale-[0.97];
+    font-family: var(--font-ui);
+    font-weight: var(--weight-semi);
+    letter-spacing: 0.02em;
+    font-size: 0.9rem;
+    transition-timing-function: var(--ease-expo-out);
+    transition-duration: var(--dur-base);
+  }
+  .btn-primary:hover {
+    background-color: var(--color-sage-700);
+    box-shadow: 0 12px 32px -6px rgba(64, 77, 53, 0.35);
+    transform: translateY(-1px);
+  }
+  .btn-primary:focus-visible {
+    outline: 2px solid var(--color-sage-500);
+    outline-offset: 3px;
   }
 
-  /* Botão secundário */
   .btn-secondary {
-    @apply inline-flex items-center justify-center px-6 py-3 
-           bg-transparent border-2 border-sage-600 text-sage-700 font-medium rounded-full
-           transition-all duration-300 ease-out
-           hover:bg-sage-600 hover:text-white
-           focus:outline-none focus:ring-2 focus:ring-sage-500 focus:ring-offset-2
-           active:scale-[0.98];
+    @apply inline-flex items-center justify-center px-6 py-3
+           border-2 border-sage-600 text-sage-700 rounded-full
+           transition-all active:scale-[0.97];
+    font-family: var(--font-ui);
+    font-weight: var(--weight-semi);
+    letter-spacing: 0.02em;
+    font-size: 0.9rem;
+    background: transparent;
+    transition-timing-function: var(--ease-expo-out);
+    transition-duration: var(--dur-base);
+  }
+  .btn-secondary:hover {
+    background-color: var(--color-sage-600);
+    color: white;
+    transform: translateY(-1px);
+  }
+  .btn-secondary:focus-visible {
+    outline: 2px solid var(--color-sage-500);
+    outline-offset: 3px;
   }
 
-  /* Card padrão */
+  /* ── Card ── */
   .card {
-    @apply bg-white rounded-2xl shadow-sm 
-           border border-cream-300
-           transition-all duration-300
-           hover:shadow-lg hover:shadow-sage-200/50;
+    @apply bg-white rounded-2xl border border-cream-300;
+    transition: box-shadow var(--dur-base) var(--ease-expo-out),
+                transform    var(--dur-base) var(--ease-expo-out);
+    box-shadow: 0 2px 8px -2px rgba(64,77,53,0.08);
+  }
+  .card:hover {
+    box-shadow: 0 16px 40px -8px rgba(64,77,53,0.16);
+    transform: translateY(-2px);
   }
 
-  /* Container padrão */
-  .container-custom {
-    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  /* ── Navigation link ── */
+  .nav-link {
+    position: relative;
+    font-family: var(--font-ui);
+    font-weight: var(--weight-semi);
+    font-size: 0.85rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    transition: color var(--dur-fast) var(--ease-smooth);
   }
-
-  /* Section padrão */
-  .section {
-    @apply py-16 md:py-24 lg:py-32;
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1.5px;
+    background: var(--accent-main);
+    transition: width var(--dur-base) var(--ease-expo-out);
   }
+  .nav-link:hover { color: var(--text-primary); }
+  .nav-link:hover::after,
+  .nav-link.active::after { width: 100%; }
+  .nav-link.active { color: var(--text-primary); }
 
-  /* Gradiente de fundo natural */
-  .bg-nature-gradient {
+  /* ── Gradient text ── */
+  .text-gradient {
     background: linear-gradient(
       135deg,
-      theme('colors.cream.100') 0%,
-      theme('colors.sage.50') 50%,
-      theme('colors.cream.200') 100%
+      var(--color-sage-600)  0%,
+      var(--color-sage-400)  50%,
+      var(--color-earth-500) 100%
     );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
-  /* Texto com gradiente */
-  .text-gradient {
-    @apply bg-gradient-to-r from-sage-600 via-sage-500 to-earth-500 
-           bg-clip-text text-transparent;
+  /* ── Section backgrounds ── */
+
+  /* Background principal — creme com camadas de profundidade */
+  .bg-nature-gradient {
+    background:
+      radial-gradient(ellipse at 0% 0%,   rgba(100,123,84,0.12)  0, transparent 60%),
+      radial-gradient(ellipse at 100% 0%, rgba(176,140,107,0.10) 0, transparent 60%),
+      radial-gradient(ellipse at 50% 100%,rgba(100,123,84,0.08)  0, transparent 60%),
+      var(--color-cream-100);
   }
 
-  /* Decoração de folha */
-  .leaf-decoration {
-    @apply absolute pointer-events-none opacity-20;
+  /* Textura sutil de grain */
+  .textured {
+    position: relative;
+  }
+  .textured::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.03;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    border-radius: inherit;
   }
 
-  /* Link de navegação */
-  .nav-link {
-    @apply relative text-sage-700 font-medium transition-colors duration-200
-           hover:text-sage-900
-           after:content-[''] after:absolute after:bottom-0 after:left-0 
-           after:w-0 after:h-0.5 after:bg-sage-500
-           after:transition-all after:duration-300
-           hover:after:w-full;
-  }
-
-  .nav-link.active {
-    @apply text-sage-900 after:w-full;
-  }
-
-  /* Prose customizado para MDX */
+  /* Prose MDX */
   .prose-custom {
     @apply max-w-none;
   }
-
   .prose-custom h1 {
     @apply text-4xl md:text-5xl font-display font-light text-sage-900 mb-6;
+    letter-spacing: var(--tracking-display);
   }
-
   .prose-custom h2 {
     @apply text-3xl md:text-4xl font-display font-light text-sage-900 mb-4 mt-12;
+    letter-spacing: var(--tracking-display);
   }
-
   .prose-custom h3 {
-    @apply text-2xl font-display font-normal text-sage-800 mb-3 mt-8;
+    @apply text-2xl font-display font-semibold text-sage-800 mb-3 mt-8;
   }
-
-  .prose-custom p {
-    @apply text-lg text-sage-800 leading-relaxed mb-6;
-  }
-
-  .prose-custom a {
-    @apply text-sage-600 border-b border-sage-300 hover:border-sage-600 transition-colors;
-  }
-
-  .prose-custom strong {
-    @apply font-semibold text-sage-900;
-  }
-
-  .prose-custom ul {
-    @apply list-disc list-inside space-y-2 mb-6 text-sage-700;
-  }
-
-  .prose-custom ol {
-    @apply list-decimal list-inside space-y-2 mb-6 text-sage-700;
-  }
-
+  .prose-custom p     { @apply text-lg text-sage-800 leading-relaxed mb-6; }
+  .prose-custom a     { @apply text-sage-600 border-b border-sage-300 hover:border-sage-600 transition-colors; }
+  .prose-custom strong{ @apply font-semibold text-sage-900; }
+  .prose-custom ul    { @apply list-disc list-inside space-y-2 mb-6 text-sage-700; }
+  .prose-custom ol    { @apply list-decimal list-inside space-y-2 mb-6 text-sage-700; }
   .prose-custom blockquote {
     @apply border-l-4 border-sage-400 bg-sage-50 px-6 py-4 my-6 rounded-r-lg text-sage-700 italic;
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   UTILITIES
+   ───────────────────────────────────────────────────────────────────────────── */
 @layer utilities {
-  /* Animações com delay */
+
+  /* ── Stagger delays — orquestração de entrada ── */
+  .stagger-1  { animation-delay:  80ms; }
+  .stagger-2  { animation-delay: 160ms; }
+  .stagger-3  { animation-delay: 240ms; }
+  .stagger-4  { animation-delay: 320ms; }
+  .stagger-5  { animation-delay: 400ms; }
+  .stagger-6  { animation-delay: 480ms; }
+
+  /* Aliases legados */
   .animation-delay-100 { animation-delay: 100ms; }
   .animation-delay-200 { animation-delay: 200ms; }
   .animation-delay-300 { animation-delay: 300ms; }
   .animation-delay-400 { animation-delay: 400ms; }
   .animation-delay-500 { animation-delay: 500ms; }
 
-  /* Aspect ratios */
-  .aspect-portrait { aspect-ratio: 3/4; }
+  /* ── Aspect ratios ── */
+  .aspect-portrait  { aspect-ratio: 3/4; }
   .aspect-landscape { aspect-ratio: 4/3; }
 
-  /* Blur de fundo */
+  /* ── Backdrop blur ── */
   .backdrop-blur-custom {
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(16px) saturate(1.4);
+    -webkit-backdrop-filter: blur(16px) saturate(1.4);
   }
 
-  /* Hide scrollbar */
+  /* ── Scrollbar hide ── */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
-  }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
 
-  /* Focus visible custom */
+  /* ── Focus ring ── */
   .focus-ring {
     @apply focus:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 focus-visible:ring-offset-2;
   }
+
+  /* ── Label uppercase — para eyebrow text ── */
+  .label-upper {
+    font-family: var(--font-ui);
+    font-weight: var(--weight-bold);
+    font-size: 0.7rem;
+    letter-spacing: var(--tracking-label);
+    text-transform: uppercase;
+  }
+
+  /* ── Display bold — para impacto ── */
+  .display-bold {
+    font-family: var(--font-display);
+    font-weight: var(--weight-bold); /* 700 — extremo superior do Cormorant */
+    letter-spacing: var(--tracking-display);
+  }
+
+  /* ── Display thin — para elegância ── */
+  .display-thin {
+    font-family: var(--font-display);
+    font-weight: var(--weight-thin); /* 300 — extremo inferior */
+    font-style: italic;
+    letter-spacing: -0.01em;
+  }
 }
 
-/* Animação de entrada para elementos */
+/* ─────────────────────────────────────────────────────────────────────────────
+   SCROLL-TRIGGERED — elementos revelados pelo Intersection Observer
+   ───────────────────────────────────────────────────────────────────────────── */
 @media (prefers-reduced-motion: no-preference) {
   .animate-on-scroll {
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    transform: translateY(28px);
+    transition:
+      opacity   var(--dur-slow) var(--ease-expo-out),
+      transform var(--dur-slow) var(--ease-expo-out);
   }
-
   .animate-on-scroll.visible {
     opacity: 1;
     transform: translateY(0);
   }
+
+  /* Stagger para scroll animations */
+  .animate-on-scroll.stagger-1 { transition-delay:  80ms; }
+  .animate-on-scroll.stagger-2 { transition-delay: 160ms; }
+  .animate-on-scroll.stagger-3 { transition-delay: 240ms; }
+  .animate-on-scroll.stagger-4 { transition-delay: 320ms; }
+  .animate-on-scroll.stagger-5 { transition-delay: 400ms; }
+  .animate-on-scroll.stagger-6 { transition-delay: 480ms; }
+
+  /* Variante: scale para cards */
+  .animate-on-scroll.scale-up {
+    transform: translateY(16px) scale(0.97);
+  }
+  .animate-on-scroll.scale-up.visible {
+    transform: translateY(0) scale(1);
+  }
 }
 
-/* Reduz animações se preferido */
+/* ── Respeitar preferência por menos movimento ── */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  *, *::before, *::after {
+    animation-duration:       0.01ms !important;
+    animation-iteration-count: 1    !important;
+    transition-duration:      0.01ms !important;
   }
 }
