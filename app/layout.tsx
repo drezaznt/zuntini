@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next'
 import { Inter, Cormorant_Garamond, Lora } from 'next/font/google'
 import { Header, Footer } from '@/components/layout'
+import { ScrollAnimations } from '@/components/ui'
 import { siteConfig, generateLocalBusinessSchema, generatePersonSchema } from '@/lib/seo'
 import '@/styles/globals.css'
 
@@ -15,7 +16,8 @@ const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-cormorant',
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '600', '700'],
+  style: ['normal', 'italic'],
 })
 
 const lora = Lora({
@@ -113,6 +115,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col antialiased">
+        <ScrollAnimations />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
