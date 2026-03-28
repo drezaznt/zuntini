@@ -116,20 +116,6 @@ export function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-t from-sage-900/25 via-transparent to-transparent" />
               </div>
 
-              {/* Badge flutuante */}
-              <div className="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-sage-md p-4 animate-float">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-sage-100 flex items-center justify-center">
-                    <svg viewBox="0 0 40 40" className="w-6 h-6 text-sage-600">
-                      <text x="20" y="28" textAnchor="middle" fill="currentColor" fontSize="18" fontWeight="700" fontFamily="serif">AZ</text>
-                    </svg>
-                  </div>
-                  <div>
-                    <span className="label-upper text-sage-400 block">Comece hoje</span>
-                    <span className="block text-sm font-display font-semibold text-sage-800">com leveza</span>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
