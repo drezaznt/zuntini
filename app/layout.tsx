@@ -85,9 +85,9 @@ export const metadata: Metadata = {
     google: 'Ah1fVvoH5pX3cDtCRjSoXpTzkNJxsVN6RSgkAHO5GE4',
   },
   icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon-16x16.png',
-    apple: '/apple-touch-icon.png',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
   },
   manifest: '/site.webmanifest',
 }
